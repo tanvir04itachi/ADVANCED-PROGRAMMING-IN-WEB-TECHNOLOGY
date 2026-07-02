@@ -1,42 +1,45 @@
-import { 
-  Controller, 
-  Delete, 
-  Get, 
-  Param, 
-  Patch, 
-  Post, 
-  Put
+import {
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Put,
 } from '@nestjs/common';
+import { CourseService } from './course.service';
 
 @Controller('course')
 export class CourseController {
+  constructor(private readonly courseService: CourseService) {}
+
   @Get()
   getAllCourses(): string {
-    return 'This returns all courses';
+    return this.courseService.getAllCourses();
   }
 
   @Get(':id')
   getCourseById(@Param('id') id: string): string {
-    return `This returns a course by ID: ${id}`;
+    return this.courseService.getCourseById(id);
   }
 
   @Post()
-    createCourse(): string {
-    return 'This returns a new course';
+  createCourse(): string {
+    return this.courseService.createCourse();
   }
 
   @Put(':id')
   updateCourse(@Param('id') id: string): string {
-    return `This returns a updated course with ID: ${id}`;
+    return this.courseService.updateCourse(id);
   }
 
   @Patch(':id')
   patchCourse(@Param('id') id: string): string {
-    return `This returns a patched course with ID: ${id}`;
+    return this.courseService.patchCourse(id);
   }
 
   @Delete(':id')
   deleteCourse(@Param('id') id: string): string {
-    return `This returns a deleted course with ID: ${id}`;
+    return this.courseService.deleteCourse(id);
   }
 }

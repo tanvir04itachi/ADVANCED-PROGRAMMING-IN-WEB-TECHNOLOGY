@@ -3,7 +3,7 @@ import { CourseService } from './course.service';
 import { CourseController } from './course.controller';
 
 @Module({
-  providers: [CourseService],
   controllers: [CourseController],
+  providers: [CourseService],
 })
 export class CourseModule {}
