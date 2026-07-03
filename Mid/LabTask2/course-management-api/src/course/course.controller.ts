@@ -1,4 +1,3 @@
-// src/course/course.controller.ts
 import {
   Controller,
   Get,
@@ -59,17 +58,12 @@ export class CourseController {
     return this.courseService.deleteCourse(id);
   }
 
-  // ============================================
-  // FILE UPLOAD - WHERE PATH IS GENERATED
-  // ============================================
   @Post(':id/upload')
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        // WHERE files are saved (you can change this)
         destination: './uploads',
         
-        // HOW filename is generated (you can modify this)
         filename: (req, file, callback) => {
           // Generate unique filename
           const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
@@ -79,7 +73,6 @@ export class CourseController {
         },
       }),
       
-      // WHAT file types are allowed (you can modify this)
       fileFilter: (req, file, callback) => {
         const allowedExtensions = ['.jpg', '.jpeg', '.png', '.pdf'];
         const ext = extname(file.originalname).toLowerCase();
@@ -95,7 +88,6 @@ export class CourseController {
         }
       },
       
-      // MAX file size (you can modify this)
       limits: {
         fileSize: 2 * 1024 * 1024, // 2MB
       },
@@ -108,7 +100,7 @@ export class CourseController {
     if (!file) {
       throw new BadRequestException('No file uploaded');
     }
-    // Pass file to service - file contains filename and path
+
     return this.courseService.uploadCourseMaterial(id, file);
   }
 }

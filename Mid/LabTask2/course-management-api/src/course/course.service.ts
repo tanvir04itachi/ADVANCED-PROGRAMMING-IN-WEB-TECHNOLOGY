@@ -1,4 +1,3 @@
-// src/course/course.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
@@ -97,9 +96,6 @@ export class CourseService {
     };
   }
 
-  // ============================================
-  // FILE UPLOAD - WHERE PATH IS RETURNED
-  // ============================================
   uploadCourseMaterial(id: string, file: any) {
     const course = this.courses.find(c => c.id === id);
     if (!course) {
@@ -109,8 +105,8 @@ export class CourseService {
     return {
       message: "Material uploaded successfully",
       courseId: id,
-      filename: file.filename,  // ← The generated filename
-      path: file.path           // ← The full path where file is saved
+      filename: file.filename,  
+      path: file.path           
     };
   }
 }
