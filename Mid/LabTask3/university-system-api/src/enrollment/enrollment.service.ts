@@ -1,35 +1,61 @@
-import { Injectable } from '@nestjs/common';
-import { CourseService } from "../course/course.service";
+import { Injectable, Inject, forwardRef } from '@nestjs/common';
+import { CourseService } from '../course/course.service';
+import { NotificationService } from '../notification/notification.service';
+
+export interface Enrollment {
+  id: string;
+  student: string;
+  course: {
+    message: string;
+    data: {
+      id: string;
+      name: string;
+      code: string;
+    } | undefined;
+  };
+  enrolledAt: Date;
+}
 
 @Injectable()
-export class EnrollmentService 
-{
-  constructor(private readonly courseService: CourseService) {}
-  
-  private enrollments: any[] = [];
-  
-  enrollStudent(studentName: string, courseId: string) 
-  {
+export class EnrollmentService {
+  private enrollments: Enrollment[] = [];
+
+  constructor(
+    private readonly courseService: CourseService,
+    @Inject(forwardRef(() => NotificationService))
+    private readonly notificationService: NotificationService,
+  ) {}
+
+  enrollStudent(studentName: string, courseId: string) {
     const course = this.courseService.getCourseById(courseId);
-    const enrollment = { 
-      id: (this.enrollments.length + 1).toString(),
+    
+    const enrollment: Enrollment = {
+      id: String(this.enrollments.length + 1),
       student: studentName,
       course: course,
+      enrolledAt: new Date(),
     };
     this.enrollments.push(enrollment);
 
+    const courseName = course.data?.name || 'the course';
+    
+    const notification = this.notificationService.sendNotification(
+      studentName,
+      `Welcome to ${courseName}! You have been enrolled successfully.`
+    );
+
     return {
-      message: "Student enrolled successfully",
+      message: 'Student enrolled successfully',
       student: studentName,
       course: course,
+      notification: notification,
     };
   }
-  
-  getAllEnrollments()
-  {
+
+  getEnrollments() {
     return {
-      message: "All enrollments fetched successfully", 
-      data: this.enrollments
+      message: 'All enrollments fetched',
+      data: this.enrollments,
     };
   }
 }

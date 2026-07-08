@@ -1,14 +1,16 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import { EnrollmentService } from './enrollment.service';
+import type { Enrollment } from './enrollment.service';
 
 @Controller('enrollment')
 export class EnrollmentController {
   constructor(private readonly enrollmentService: EnrollmentService) {}
 
   @Get()
-  getAllEnrollments() {
-    return this.enrollmentService.getAllEnrollments();
+  getEnrollments() {
+    return this.enrollmentService.getEnrollments();
   }
+
   @Post()
   enrollStudent(@Body() body: { studentName: string; courseId: string }) {
     return this.enrollmentService.enrollStudent(body.studentName, body.courseId);
